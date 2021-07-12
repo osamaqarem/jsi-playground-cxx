@@ -1,13 +1,20 @@
 import * as React from 'react';
-
 import { StyleSheet, View, Text } from 'react-native';
-import ImageColors from 'react-native-image-colors';
+
+declare function multiply(x: number, y: number): number;
 
 export default function App() {
   const [result, setResult] = React.useState<number | undefined>();
 
   React.useEffect(() => {
-    ImageColors.multiply(3, 7).then(setResult);
+    const process = async () => {
+      const res = multiply(Math.random() * 10 + 1, Math.random() * 10 + 1);
+      setResult(res);
+    };
+
+    setInterval(() => {
+      process();
+    }, 1000);
   }, []);
 
   return (

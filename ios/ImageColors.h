@@ -8,6 +8,4 @@
 
 @interface ImageColors : NSObject <RCTBridgeModule>
 
-@property (nonatomic) RCTBridge* bridge;
-
 @end

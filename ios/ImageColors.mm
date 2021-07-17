@@ -5,6 +5,8 @@
 
 @implementation ImageColors
 
+@synthesize bridge = _bridge;
+
 RCT_EXPORT_MODULE()
 
 + (BOOL) requiresMainQueueSetup {

@@ -8,6 +8,6 @@
 
 @interface ImageColors : NSObject <RCTBridgeModule>
 
-@property (nonatomic, assign) BOOL setBridgeOnMainQueue;
+@property (nonatomic) RCTBridge* bridge;
 
 @end

@@ -2,7 +2,19 @@
 #include "example.h"
 
 extern "C"
-JNIEXPORT jint JNICALL
-Java_com_reactnativeimagecolors_ImageColorsModule_nativeMultiply(JNIEnv *env, jclass type, jint a, jint b) {
-    return example::multiply(a, b);
+JNIEXPORT void JNICALL
+Java_com_reactnativeimagecolors_ImageColorsModule_nativeInstall(JNIEnv *env, jobject thiz,
+                                                                jlong jsi_ptr) {
+    auto runtime = reinterpret_cast<facebook::jsi::Runtime *>(jsi_ptr);
+
+    if (runtime) {
+        installImageColors(*runtime);
+    }
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_reactnativeimagecolors_ImageColorsModule_invalidate(JNIEnv *env, jobject thiz,
+                                                             jlong jsi_ptr) {
+    cleanUpImageColors();
 }

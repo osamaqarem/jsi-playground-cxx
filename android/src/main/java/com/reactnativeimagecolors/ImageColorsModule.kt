@@ -1,36 +1,41 @@
 package com.reactnativeimagecolors
 
+import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.Promise
 
-class ImageColorsModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class ImageColorsModule(reactContext: ReactApplicationContext) :
+  ReactContextBaseJavaModule(reactContext) {
 
-    override fun getName(): String {
-        return "ImageColors"
+  private external fun nativeInstall(jsiPtr: Long)
+  private external fun invalidate(jsiPtr: Long)
+
+  override fun getName(): String {
+    return "ImageColors"
+  }
+
+  companion object {
+    init {
+      System.loadLibrary("cpp")
     }
+  }
 
-    // Example method
-    // See https://reactnative.dev/docs/native-modules-android
-    @ReactMethod
-    fun multiply(a: Int, b: Int, promise: Promise) {
-    
-      promise.resolve(nativeMultiply(a, b));
-    
+  @ReactMethod
+  fun test(source: String, promise: Promise) {
+    promise.resolve("Hello")
+  }
+
+
+  override fun initialize() {
+    super.initialize()
+    reactApplicationContext.runOnJSQueueThread {
+      nativeInstall(reactApplicationContext.javaScriptContextHolder.get())
     }
+  }
 
-    
-    external fun nativeMultiply(a: Int, b: Int): Int;
-
-    companion object
-    {
-
-        // Used to load the 'native-lib' library on application startup.
-        init
-        {
-            System.loadLibrary("cpp")
-        }
-    }
-    
+  override fun onCatalystInstanceDestroy() {
+    super.onCatalystInstanceDestroy()
+    invalidate(reactApplicationContext.javaScriptContextHolder.get())
+  }
 }

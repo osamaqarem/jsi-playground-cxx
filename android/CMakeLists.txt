@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.4.1)
 
+set(CMAKE_CXX_COMPILER_VERSION "12.0")
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 11)
 
@@ -25,6 +26,14 @@ include_directories(
 )
 
 target_link_libraries(
-        cpp # Library name
-        android
+        cpp # Library names
+        # android
 )
+
+include(../cpp/build/conanbuildinfo.cmake)
+
+conan_basic_setup()
+
+message("CMAKE_CXX_COMPILER_VERSION: ${CMAKE_CXX_COMPILER_VERSION}"
+        "\nCMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}"
+        "\nCONAN_LIBS: ${CONAN_LIBS}")

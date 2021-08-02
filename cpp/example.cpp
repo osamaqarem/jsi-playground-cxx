@@ -1,10 +1,27 @@
 #include "example.h"
+#include "curl/curl.h"
 #include <iostream>
+#include <future>
+#include <thread>
 
 using namespace facebook;
+using namespace std;
+
+template<typename... ParamTypes>
+function<void(int, function<void(ParamTypes... paramTypes)>,
+              ParamTypes... paramTypes)> setTimeout = [](
+        int ms,
+        function<void(ParamTypes... paramTypes)> cb,
+        ParamTypes... paramTypes
+) {
+    async(launch::async, [=]() {
+        this_thread::sleep_for(chrono::milliseconds(ms));
+        cb(paramTypes...);
+    });
+};
 
 void installImageColors(jsi::Runtime &jsiRuntime) {
-    std::cout << "installImageColors" << "\n";
+    cout << "installImageColors" << "\n";
 
     auto multiply = jsi::Function::createFromHostFunction(
             jsiRuntime,
@@ -20,17 +37,31 @@ void installImageColors(jsi::Runtime &jsiRuntime) {
                 auto b = &arguments[1];
 
                 if (a->isNumber() && b->isNumber()) {
-                    return a->getNumber() * b->getNumber();
-                }
+                    auto results = a->getNumber() * b->getNumber();
 
-                return jsi::Value::undefined();
+                    setTimeout<int>(3000, [&results](int hmm) {
+                        results = 500;
+                    }, 10);
+
+                    return results;
+                } else {
+                    // TODO: async operation
+                    // get back on JS thread
+                    //  jsInvoker->invokeAsync(move(retainedFunc));
+//                async(launch::async, [=]() {
+//
+//                });
+
+                    return jsi::Value::undefined();
+                }
             }
     );
 
-    jsiRuntime.global().setProperty(jsiRuntime, "multiply", std::move(multiply));
+    jsiRuntime.global().setProperty(jsiRuntime, "multiply", move(multiply));
 }
 
 
 void cleanUpImageColors() {
-    std::cout << "cleanUpImageColors" << "\n";
+    cout << "cleanUpImageColors" << "\n";
 }
+

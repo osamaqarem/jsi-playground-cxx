@@ -29,9 +29,11 @@ class ImageColorsModule(reactContext: ReactApplicationContext) :
 
   override fun initialize() {
     super.initialize()
-    reactApplicationContext.runOnJSQueueThread {
-      nativeInstall(reactApplicationContext.javaScriptContextHolder.get())
-    }
+//    reactApplicationContext.runOnJSQueueThread {
+////   s   reactApplicationContext.catalystInstance.jsCallInvokerHolder
+//      nativeInstall(reactApplicationContext.javaScriptContextHolder.get())
+//    }
+    nativeInstall(reactApplicationContext.javaScriptContextHolder.get())
   }
 
   override fun onCatalystInstanceDestroy() {

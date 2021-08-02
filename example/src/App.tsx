@@ -8,11 +8,13 @@ export default function App() {
 
   React.useEffect(() => {
     const process = async () => {
-      const res = multiply(Math.random() * 10 + 1, Math.random() * 10 + 1);
+      console.log('before multiply');
+      const res = multiply(2, 2);
+      console.log('after multiply');
       setResult(res);
     };
 
-    setInterval(() => {
+    setTimeout(() => {
       process();
     }, 1000);
   }, []);
